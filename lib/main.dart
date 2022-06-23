@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_object_box/helper/object_box.dart';
 import 'package:flutter_object_box/model/user.dart';
@@ -71,7 +72,13 @@ class _HomePageState extends State<HomePage> {
           }),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          final user = User(
+            name: Faker().person.firstName(),
+            email: Faker().internet.email(),
+          );
+          objectBox.insertUser(user);
+        },
       ),
     );
   }

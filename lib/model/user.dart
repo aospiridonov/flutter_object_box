@@ -1,7 +1,6 @@
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-@Sync()
 class User {
   int id;
   final String name;
