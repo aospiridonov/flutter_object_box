@@ -3,8 +3,8 @@ import 'package:objectbox/objectbox.dart';
 @Entity()
 class User {
   int id;
-  final String name;
-  final String email;
+  String name;
+  String email;
 
   User({
     this.id = 0,

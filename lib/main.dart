@@ -65,6 +65,15 @@ class _HomePageState extends State<HomePage> {
                   return ListTile(
                     title: Text(user.name),
                     subtitle: Text(user.email),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () => objectBox.deleteUser(user.id),
+                    ),
+                    onTap: () {
+                      user.name = Faker().person.firstName();
+                      user.email = Faker().internet.email();
+                      objectBox.insertUser(user);
+                    },
                   );
                 },
               );
