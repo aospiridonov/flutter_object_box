@@ -52,6 +52,16 @@ class _HomePageState extends State<HomePage> {
         title: const Text('ObjectBox'),
         centerTitle: true,
       ),
+      body: ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          final user = users[index];
+          return ListTile(
+            title: Text(user.name),
+            subtitle: Text(user.email),
+          );
+        },
+      ),
     );
   }
 }
