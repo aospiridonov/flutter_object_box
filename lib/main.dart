@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_object_box/helper/object_box.dart';
+import 'package:flutter_object_box/model/user.dart';
 
-void main() {
+late ObjectBox objectBox;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  objectBox = await ObjectBox.init();
   runApp(const MyApp());
 }
 
@@ -28,22 +34,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class User {
-  final String name;
-  final String email;
-
-  User({
-    required this.name,
-    required this.email,
-  });
-}
-
 class _HomePageState extends State<HomePage> {
-  List<User> users = [
-    User(name: 'User 1', email: 'user1@gmail.com'),
-    User(name: 'User 2', email: 'user2@gmail.com'),
-    User(name: 'User 3', email: 'user3@gmail.com'),
-  ];
+  late Stream<List<User>> streamUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    streamUsers = objectBox.getUsers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,15 +50,28 @@ class _HomePageState extends State<HomePage> {
         title: const Text('ObjectBox'),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          final user = users[index];
-          return ListTile(
-            title: Text(user.name),
-            subtitle: Text(user.email),
-          );
-        },
+      body: StreamBuilder<List<User>>(
+          stream: streamUsers,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            } else {
+              final users = snapshot.data!;
+              return ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  final user = users[index];
+                  return ListTile(
+                    title: Text(user.name),
+                    subtitle: Text(user.email),
+                  );
+                },
+              );
+            }
+          }),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {},
       ),
     );
   }
